@@ -1,0 +1,155 @@
+/* nvue不能用标签命名样式，不能放在微信组件中，否则微信开发工具会报警告，无法使用标签名当做选择器 */
+/* #ifndef APP-NVUE */
+image {
+	display: inline-block;
+}
+
+/* 在weex，也即nvue中，所有元素默认为border-box */
+view,
+text {
+	box-sizing: border-box;
+}
+
+/* 使z-icon z-image标签垂直居中 */
+z-icon,
+z-image{
+	display: inline-flex;
+	align-items: center;
+}
+
+/* 隐藏z-scrollbar-hidden的滚动条 */
+.z-scrollbar-hidden::-webkit-scrollbar {
+	display: none;
+	width: 0 !important;
+	height: 0 !important;
+	-webkit-appearance: none;
+	background: transparent;
+}
+
+/* #endif */
+
+.z-relative,
+.z-rela {
+	position: relative;
+}
+
+.z-absolute,
+.z-abso {
+	position: absolute;
+}
+/* 以下是通用的布局属性 全部加了!important是为了兼容h5页面 所以在后面如果同时使用了通用class 但是又想通过其他页面class去覆盖本页面的属性同样需要在该属性后加!important */
+/* 默认水平布局 */
+.z-flex {
+	/* #ifndef APP-NVUE */
+	display: flex !important;
+	/* #endif */
+	flex-direction: row !important;
+	align-items: center !important;
+}
+.z-inline-flex {
+	/* #ifndef APP-NVUE */
+	display: inline-flex !important;
+	/* #endif */
+	flex-direction: row !important;
+	align-items: center !important;
+}
+
+/* 垂直布局  垂直居中 水平居左 */
+.z-flex-col {
+	/* #ifndef APP-NVUE */
+	display: flex !important;
+	/* #endif */
+	flex-direction: column !important;
+}
+.z-flex-1{
+		flex: 1 !important;
+}
+/* 申明垂直布局  高度为父级的100% 并且子元素在屏幕垂直方向居上 水平方向居左 */
+.z-flex-col-1 {
+	/* #ifndef APP-NVUE */
+	display: flex !important;
+	overflow-y: hidden !important;
+	/* #endif */
+	flex-direction: column !important;
+	height: 0 !important;
+	flex: 1 !important;
+}
+/* 申明水平布局  宽度为父级的100% 并且子元素在屏幕垂直方向居上 水平方向居左 */
+.z-flex-row-1 {
+	/* #ifndef APP-NVUE */
+	display: flex !important;
+	overflow-x: hidden !important;
+	/* #endif */
+	flex-direction:row !important;
+	// width: 0 !important;
+	flex: 1 !important;
+}
+.z-flex-wrap {
+	flex-wrap: wrap !important;
+}
+
+.z-flex-nowrap {
+	flex-wrap: nowrap !important;
+}
+
+.z-col-center {
+	align-items: center !important;
+}
+
+.z-col-top {
+	align-items: flex-start !important;
+}
+
+.z-col-bottom {
+	align-items: flex-end !important;
+}
+
+.z-row-center {
+	justify-content: center !important;
+}
+
+.z-row-left {
+	justify-content: flex-start !important;
+}
+
+.z-row-right {
+	justify-content: flex-end !important;
+}
+
+.z-row-between {
+	justify-content: space-between !important;
+}
+
+.z-row-around {
+	justify-content: space-around !important;
+}
+
+.z-text {
+	font-size: 14px;
+}
+
+.z-text-left {
+	text-align: left;
+}
+
+.z-text-center {
+	text-align: center;
+}
+
+.z-text-right {
+	text-align: right;
+}
+
+/* 超出一行省略 */
+.z-line-1 {
+	/* #ifdef APP-NVUE */
+	lines: 1;
+	text-overflow: ellipsis;
+	/* #endif */
+	/* #ifndef APP-NVUE */
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
+	/* #endif */
+}

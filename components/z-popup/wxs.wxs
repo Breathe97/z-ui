@@ -1,0 +1,77 @@
+var startX = 0
+var startY = 0
+var lastLeft = 50
+var lastTop = 50
+var touchMoveX = 0 // 滑动了多少X
+var touchMoveY = 0 // 滑动了多少Y
+var touchAList = [] // 滑动的记录
+var options = {} // js中所定义的所有参数
+var zPopup = null
+var zMask = null
+// 监听options数据发生变化
+function change(newValue, oldValue, ownerInstance, instance) {
+	options = newValue // 更新数据
+	zPopup = ownerInstance.selectComponent('.z-popup') // 返回组件的实例
+	// zMask = ownerInstance.selectComponent('.z-mask')
+	zMask = ownerInstance.selectComponent('.z-mask').selectComponent('.z-mask') // 返回组件的实例
+	console.log('--------->zMask', zMask)
+	// zPopup = ownerInstance.selectComponent('.z-popup') // 返回组件的实例
+}
+// 触摸开始
+function touchstart(event, ins) {
+	if (!options.drag) return // 关闭滑动不执行
+	if (options.rendering) return // 处理中不多次执行
+	var touch = event.touches[0] || event.changedTouches[0]
+	startX = touch.pageX // 滑动开始的X
+	startY = touch.pageY // 滑动开始的Y
+	var instance = ins.selectComponent('.z-popup') // 返回组件的实例
+}
+// 滑动中
+function touchmove(event, ins) {
+	if (!options.drag) return // 关闭滑动不执行
+	if (options.rendering) return // 处理中不多次执行
+	// console.log('--------->123', )
+	var touch = event.touches[0] || event.changedTouches[0]
+	var pageX = touch.pageX // 滑动时的X
+	var pageY = touch.pageY // 滑动时的Y
+	switch (options.mode) {
+		case 'top':
+			touchMoveY = pageY - startY
+			touchMoveY = touchMoveY > 0 ? 0 : touchMoveY
+			ins.selectComponent('.z-popup').setStyle({ 'transition-property': 'auto', top: touchMoveY + 'px' })
+			break
+		case 'left':
+			touchMoveX = pageX - startX
+			touchMoveX = touchMoveX > 0 ? 0 : touchMoveX
+			ins.selectComponent('.z-popup').setStyle({ 'transition-property': 'auto', left: touchMoveX + 'px' })
+			break
+		case 'right':
+			touchMoveX = pageX - startX
+			touchMoveX = touchMoveX < 0 ? 0 : -touchMoveX
+			ins.selectComponent('.z-popup').setStyle({ 'transition-property': 'auto', right: touchMoveX + 'px' })
+			break
+		default: // 默认bottom
+			// 计算向下滑动了多少
+			touchMoveY = pageY - startY
+			touchMoveY = touchMoveY < 0 ? 0 : -touchMoveY
+			zPopup.setStyle({ 'transition-property': 'auto', bottom: touchMoveY + 'px' })
+			zMask && zMask.setStyle({ 'transition-property': 'auto', opacity: (1 - Math.abs(touchMoveY) / options.height) })
+			break
+	}
+	return false
+}
+// 滑动结束
+function touchend(event, ins) {
+	if (!options.drag) return // 关闭滑动不执行
+	if (options.rendering) return // 处理中不多次执行
+	ins.callMethod('show', 'false') // 关闭
+	ins.selectComponent('.z-popup').setStyle({ 'transition-property': 'all' }) // 恢复popup动画
+}
+
+
+module.exports = {
+	touchstart: touchstart,
+	touchmove: touchmove,
+	touchend: touchend,
+	change: change
+}
